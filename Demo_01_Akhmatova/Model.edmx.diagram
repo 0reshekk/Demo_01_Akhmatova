@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="de3ca55ff01d4124a6a15f0c7ef0f3ff" Name="Diagram1">
+        <EntityTypeShape EntityType="HousingModel.Apartment" Width="1.5" PointX="0.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HousingModel.Building" Width="1.5" PointX="1.5" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HousingModel.Debt" Width="1.5" PointX="3" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HousingModel.Employee" Width="1.5" PointX="0.75" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HousingModel.Payment" Width="1.5" PointX="6" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HousingModel.Request" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HousingModel.RequestHistory" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HousingModel.RequestStatus" Width="1.5" PointX="0.75" PointY="16.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HousingModel.Resident" Width="1.5" PointX="0.75" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HousingModel.sysdiagrams" Width="1.5" PointX="7.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HousingModel.vRequestHistoryByAddress" Width="1.5" PointX="2.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HousingModel.vRequestHistoryByEmployee" Width="1.5" PointX="8.75" PointY="3.875" IsExpanded="true" />
+        <AssociationConnector Association="HousingModel.FK_Apartment_Building" ManuallyRouted="false" />
+        <AssociationConnector Association="HousingModel.FK_Debt_Apartment" ManuallyRouted="false" />
+        <AssociationConnector Association="HousingModel.FK_Payment_Apartment" ManuallyRouted="false" />
+        <AssociationConnector Association="HousingModel.FK_Request_Apartment" ManuallyRouted="false" />
+        <AssociationConnector Association="HousingModel.FK_Debt_Resident" ManuallyRouted="false" />
+        <AssociationConnector Association="HousingModel.FK_Request_AssignedEmployee" ManuallyRouted="false" />
+        <AssociationConnector Association="HousingModel.FK_RequestHistory_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="HousingModel.FK_Payment_Resident" ManuallyRouted="false" />
+        <AssociationConnector Association="HousingModel.FK_Request_ApplicantResident" ManuallyRouted="false" />
+        <AssociationConnector Association="HousingModel.FK_Request_Status" ManuallyRouted="false" />
+        <AssociationConnector Association="HousingModel.FK_RequestHistory_Request" ManuallyRouted="false" />
+        <AssociationConnector Association="HousingModel.FK_RequestHistory_Status" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
