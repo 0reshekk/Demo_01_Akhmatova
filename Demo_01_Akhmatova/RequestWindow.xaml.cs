@@ -13,24 +13,22 @@ namespace Demo_01_Akhmatova
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-            if (DataContext is not RequestEditorViewModel viewModel)
+            if (DataContext is RequestEditorViewModel viewModel)
             {
-                return;
-            }
+                var validationMessage = viewModel.Validate();
+                if (!string.IsNullOrWhiteSpace(validationMessage))
+                {
+                    MessageBox.Show(
+                        validationMessage,
+                        "Ошибка ввода",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    return;
+                }
 
-            var validationMessage = viewModel.Validate();
-            if (!string.IsNullOrWhiteSpace(validationMessage))
-            {
-                MessageBox.Show(
-                    validationMessage,
-                    "Ошибка ввода",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-                return;
+                viewModel.ApplyChanges();
+                DialogResult = true;
             }
-
-            viewModel.ApplyChanges();
-            DialogResult = true;
         }
 
         private void CancelClick(object sender, RoutedEventArgs e)

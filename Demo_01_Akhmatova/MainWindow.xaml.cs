@@ -121,19 +121,17 @@ namespace Demo_01_Akhmatova
                 return;
             }
 
-            if (sender is not ListView)
+            if (sender is ListView)
             {
-                return;
-            }
+                var source = e.OriginalSource as DependencyObject;
+                while (!(source == null || source is ListViewItem))
+                {
+                    source = VisualTreeHelper.GetParent(source);
+                }
 
-            var source = e.OriginalSource as DependencyObject;
-            while (source != null && source is not ListViewItem)
-            {
-                source = VisualTreeHelper.GetParent(source);
+                if (source is ListViewItem)
+                    EditRequestClick(sender, e);
             }
-
-            if (source is ListViewItem)
-                EditRequestClick(sender, e);
         }
     }
 }

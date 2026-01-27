@@ -54,9 +54,6 @@
     <Style TargetType="Page">
         <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
         <Setter Property="FontFamily" Value="Segoe UI" />
-        @@ -275,26 +288,26 @@
-        <Setter Property="CornerRadius" Value="4" />
-        <Setter Property="Padding" Value="16" />
         <Setter Property="Margin" Value="16,8" />
     </Style>
 
