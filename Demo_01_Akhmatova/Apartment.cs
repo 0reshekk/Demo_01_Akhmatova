@@ -14,6 +14,14 @@ namespace Demo_01_Akhmatova
     
     public partial class Apartment
     {
+        public string AddressLine
+        {
+            get
+            {
+                var buildingAddress = Building?.Address ?? "Адрес не указан";
+                return $"{buildingAddress}, кв. {ApartmentNumber}";
+            }
+        }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Apartment()
         {

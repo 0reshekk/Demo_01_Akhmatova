@@ -15,12 +15,21 @@ namespace Demo_01_Akhmatova
             InitializeComponent();
             _viewModel = new MainViewModel();
             DataContext = _viewModel;
+
+            if (_viewModel.HasLoadError)
+            {
+                MessageBox.Show(
+                    _viewModel.LoadErrorMessage,
+                    "Ошибка загрузки данных",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
         private void AddRequestClick(object sender, RoutedEventArgs e)
         {
             var newRequest = new ServiceRequest();
-            var editorViewModel = new RequestEditorViewModel(newRequest, _viewModel.Addresses, _viewModel.Employees, true);
+            var editorViewModel = new RequestEditorViewModel(newRequest, _viewModel.Addresses, _viewModel.Employees, _viewModel.StatusOptions, true);
             var editorWindow = new RequestWindow(editorViewModel)
             {
                 Owner = this
@@ -28,7 +37,14 @@ namespace Demo_01_Akhmatova
 
             if (editorWindow.ShowDialog() == true)
             {
-                _viewModel.AddRequest(newRequest);
+                if (!_viewModel.TryAddRequest(newRequest, out var errorMessage))
+                {
+                    MessageBox.Show(
+                        errorMessage,
+                        "Ошибка сохранения",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
             }
         }
 
@@ -44,14 +60,23 @@ namespace Demo_01_Akhmatova
                 return;
             }
 
-            var editorViewModel = new RequestEditorViewModel(_viewModel.SelectedRequest, _viewModel.Addresses, _viewModel.Employees, false);
+            var editorViewModel = new RequestEditorViewModel(_viewModel.SelectedRequest, _viewModel.Addresses, _viewModel.Employees, _viewModel.StatusOptions, false);
             var editorWindow = new RequestWindow(editorViewModel)
             {
                 Owner = this
             };
 
             if (editorWindow.ShowDialog() == true)
-                _viewModel.RefreshHistory();
+            {
+                if (!_viewModel.TryUpdateRequest(_viewModel.SelectedRequest, out var errorMessage))
+                {
+                    MessageBox.Show(
+                        errorMessage,
+                        "Ошибка сохранения",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
+            }
         }
 
         private void DeleteRequestClick(object sender, RoutedEventArgs e)
@@ -74,8 +99,18 @@ namespace Demo_01_Akhmatova
 
             if (result == MessageBoxResult.Yes)
             {
-                _viewModel.Requests.Remove(_viewModel.SelectedRequest);
-                _viewModel.SelectedRequest = null;
+                if (!_viewModel.TryDeleteRequest(_viewModel.SelectedRequest, out var errorMessage))
+                {
+                    MessageBox.Show(
+                        errorMessage,
+                        "Ошибка удаления",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
+                else
+                {
+                    _viewModel.SelectedRequest = null;
+                }
             }
         }
 
