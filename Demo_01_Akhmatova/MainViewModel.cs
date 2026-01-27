@@ -8,7 +8,7 @@ namespace Demo_01_Akhmatova.ViewModels
 {
     public class MainViewModel : ObservableObject
     {
-        private readonly Entities _context;
+        private Entities Context => Entities.GetContext();
         private ServiceRequest _selectedRequest;
         private Employee _selectedEmployeeFilter;
         private Apartment _selectedAddressFilter;
@@ -16,7 +16,6 @@ namespace Demo_01_Akhmatova.ViewModels
 
         public MainViewModel()
         {
-            _context = Entities.GetContext();
             Requests = new ObservableCollection<ServiceRequest>();
             Addresses = new ObservableCollection<Apartment>();
             Employees = new ObservableCollection<Employee>();
@@ -91,9 +90,10 @@ namespace Demo_01_Akhmatova.ViewModels
                 request.ApplyToEntity();
                 request.Entity.CreatedAt = DateTime.Now;
                 request.Entity.UpdatedAt = DateTime.Now;
-                _context.Request.Add(request.Entity);
-                AddHistoryEntry(request.Entity, "Создана новая заявка.");
-                _context.SaveChanges();
+                var context = Entities.GetContext();
+                context.Request.Add(request.Entity);
+                AddHistoryEntry(context, request.Entity, "Создана новая заявка.");
+                context.SaveChanges();
                 request.UpdateFromEntity();
                 Requests.Add(request);
                 RefreshHistory();
@@ -114,8 +114,9 @@ namespace Demo_01_Akhmatova.ViewModels
             {
                 request.ApplyToEntity();
                 request.Entity.UpdatedAt = DateTime.Now;
-                AddHistoryEntry(request.Entity, "Данные заявки обновлены.");
-                _context.SaveChanges();
+                var context = Entities.GetContext();
+                AddHistoryEntry(context, request.Entity, "Данные заявки обновлены.");
+                context.SaveChanges();
                 request.UpdateFromEntity();
                 RefreshHistory();
                 return true;
@@ -133,14 +134,15 @@ namespace Demo_01_Akhmatova.ViewModels
 
             try
             {
-                var histories = _context.RequestHistory.Where(history => history.RequestId == request.Entity.RequestId).ToList();
+                var context = Entities.GetContext();
+                var histories = context.RequestHistory.Where(history => history.RequestId == request.Entity.RequestId).ToList();
                 if (histories.Any())
                 {
-                    _context.RequestHistory.RemoveRange(histories);
+                    context.RequestHistory.RemoveRange(histories);
                 }
 
-                _context.Request.Remove(request.Entity);
-                _context.SaveChanges();
+                context.Request.Remove(request.Entity);
+                context.SaveChanges();
                 Requests.Remove(request);
                 RefreshHistory();
                 return true;
@@ -179,7 +181,8 @@ namespace Demo_01_Akhmatova.ViewModels
         private void LoadAddresses()
         {
             Addresses.Clear();
-            var addresses = _context.Apartment
+            var addresses = Context.Apartment
+                .AsNoTracking()
                 .Include(apartment => apartment.Building)
                 .OrderBy(apartment => apartment.Building.Address)
                 .ThenBy(apartment => apartment.ApartmentNumber)
@@ -194,7 +197,8 @@ namespace Demo_01_Akhmatova.ViewModels
         private void LoadEmployees()
         {
             Employees.Clear();
-            var employees = _context.Employee
+            var employees = Context.Employee
+                .AsNoTracking()
                 .OrderBy(employee => employee.FullName)
                 .ToList();
 
@@ -207,7 +211,8 @@ namespace Demo_01_Akhmatova.ViewModels
         private void LoadStatuses()
         {
             StatusOptions.Clear();
-            var statuses = _context.RequestStatus
+            var statuses = Context.RequestStatus
+                .AsNoTracking()
                 .OrderBy(status => status.StatusName)
                 .ToList();
 
@@ -220,7 +225,8 @@ namespace Demo_01_Akhmatova.ViewModels
         private void LoadRequests()
         {
             Requests.Clear();
-            var requests = _context.Request
+            var requests = Context.Request
+                .AsNoTracking()
                 .Include(request => request.Apartment.Building)
                 .Include(request => request.Employee)
                 .Include(request => request.RequestStatus)
@@ -267,7 +273,8 @@ namespace Demo_01_Akhmatova.ViewModels
                 return;
             }
 
-            var historyEntries = _context.RequestHistory
+            var historyEntries = Context.RequestHistory
+                .AsNoTracking()
                 .Include(history => history.Request.Apartment.Building)
                 .Include(history => history.Request)
                 .Include(history => history.RequestStatus)
@@ -291,7 +298,8 @@ namespace Demo_01_Akhmatova.ViewModels
                 return;
             }
 
-            var historyEntries = _context.RequestHistory
+            var historyEntries = Context.RequestHistory
+                .AsNoTracking()
                 .Include(history => history.Request.Apartment.Building)
                 .Include(history => history.Request)
                 .Include(history => history.RequestStatus)
@@ -306,7 +314,7 @@ namespace Demo_01_Akhmatova.ViewModels
             }
         }
 
-        private void AddHistoryEntry(Request request, string comment)
+        private static void AddHistoryEntry(Entities context, Request request, string comment)
         {
             var history = new RequestHistory
             {
@@ -317,7 +325,7 @@ namespace Demo_01_Akhmatova.ViewModels
                 Comment = comment
             };
 
-            _context.RequestHistory.Add(history);
+            context.RequestHistory.Add(history);
         }
 
         private static RequestHistoryItem MapHistoryItem(RequestHistory history)

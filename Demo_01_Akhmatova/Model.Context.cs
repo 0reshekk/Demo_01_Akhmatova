@@ -10,9 +10,10 @@
 namespace Demo_01_Akhmatova
 {
     using System;
+    using System.Data;
     using System.Data.Entity;
-    using System.Data.Entity.Infrastructure;
     using System.Data.Entity.Core.Objects;
+    using System.Data.Entity.Infrastructure;
     using System.Linq;
     
     public partial class Entities : DbContext
@@ -20,7 +21,12 @@ namespace Demo_01_Akhmatova
         public static Entities context;
         public static Entities GetContext()
         {
-            if (context == null) context = new Entities();
+            if (context == null || context.Database.Connection.State == ConnectionState.Broken)
+            {
+                context = new Entities();
+                context.Configuration.LazyLoadingEnabled = true;
+                context.Configuration.ProxyCreationEnabled = true;
+            }
             return context;
         }
 
