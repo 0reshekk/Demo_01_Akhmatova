@@ -1,0 +1,135 @@
+<Window
+    x:Class="Demo_01_Akhmatova.BuildingWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="{Binding WindowTitle}"
+    Width="720"
+    Height="360"
+    Icon="/source/icon.ico"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border
+            Grid.Row="0"
+            Padding="8"
+            Background="{StaticResource SecondBackgroundBrush}">
+            <TextBlock
+                HorizontalAlignment="Left"
+                Style="{StaticResource LargeHeaderStyle}"
+                Text="{Binding WindowTitle}" />
+        </Border>
+
+        <Grid Grid.Row="1" Margin="0,12,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="0,0,12,8"
+                VerticalAlignment="Center"
+                Style="{StaticResource SubHeaderStyle}"
+                Text="Адрес" />
+            <TextBox
+                Grid.Row="0"
+                Grid.Column="1"
+                Style="{StaticResource TextBoxFieldStyle}"
+                Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="0,0,12,8"
+                VerticalAlignment="Center"
+                Style="{StaticResource SubHeaderStyle}"
+                Text="Начало управления" />
+            <DatePicker
+                Grid.Row="1"
+                Grid.Column="1"
+                SelectedDate="{Binding ManagementStartDate}" />
+
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="0"
+                Margin="0,0,12,8"
+                VerticalAlignment="Center"
+                Style="{StaticResource SubHeaderStyle}"
+                Text="Этажей" />
+            <TextBox
+                Grid.Row="2"
+                Grid.Column="1"
+                Style="{StaticResource TextBoxFieldStyle}"
+                Text="{Binding Floors}" />
+
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="0"
+                Margin="0,0,12,8"
+                VerticalAlignment="Center"
+                Style="{StaticResource SubHeaderStyle}"
+                Text="Квартир" />
+            <TextBox
+                Grid.Row="3"
+                Grid.Column="1"
+                Style="{StaticResource TextBoxFieldStyle}"
+                Text="{Binding ApartmentsPlanned}" />
+
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="0"
+                Margin="0,0,12,8"
+                VerticalAlignment="Center"
+                Style="{StaticResource SubHeaderStyle}"
+                Text="Год постройки" />
+            <TextBox
+                Grid.Row="4"
+                Grid.Column="1"
+                Style="{StaticResource TextBoxFieldStyle}"
+                Text="{Binding BuildYear}" />
+
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="0"
+                Margin="0,0,12,0"
+                VerticalAlignment="Center"
+                Style="{StaticResource SubHeaderStyle}"
+                Text="Площадь, м²" />
+            <TextBox
+                Grid.Row="5"
+                Grid.Column="1"
+                Style="{StaticResource TextBoxFieldStyle}"
+                Text="{Binding AreaM2}" />
+        </Grid>
+
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                Margin="0,0,8,0"
+                Click="SaveClick"
+                Content="Сохранить"
+                Style="{StaticResource ActionButtonStyle}" />
+            <Button Click="CancelClick" Content="Отмена" />
+        </StackPanel>
+    </Grid>
+</Window>
+

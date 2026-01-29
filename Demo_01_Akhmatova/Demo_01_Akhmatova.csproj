@@ -67,15 +67,32 @@
     <Compile Include="Apartment.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="ApartmentEditorViewModel.cs" />
+    <Compile Include="ApartmentWindow.xaml.cs">
+      <DependentUpon>ApartmentWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Building.cs">
       <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BuildingEditorViewModel.cs" />
+    <Compile Include="BuildingWindow.xaml.cs">
+      <DependentUpon>BuildingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Debt.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="DebtEditorViewModel.cs" />
+    <Compile Include="DebtWindow.xaml.cs">
+      <DependentUpon>DebtWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Employee.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="EmployeeEditorViewModel.cs" />
+    <Compile Include="EmployeeWindow.xaml.cs">
+      <DependentUpon>EmployeeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ResidentEditorViewModel.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="Model.cs">
       <AutoGen>True</AutoGen>
@@ -99,6 +116,9 @@
     </Compile>
     <Compile Include="RequestWindow.xaml.cs">
       <DependentUpon>RequestWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ResidentWindow.xaml.cs">
+      <DependentUpon>ResidentWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Resident.cs">
       <DependentUpon>Model.tt</DependentUpon>
@@ -136,6 +156,26 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="RequestWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ApartmentWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BuildingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DebtWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EmployeeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResidentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

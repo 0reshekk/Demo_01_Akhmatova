@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
@@ -12,6 +12,12 @@ namespace Demo_01_Akhmatova.ViewModels
         private ServiceRequest _selectedRequest;
         private Employee _selectedEmployeeFilter;
         private Apartment _selectedAddressFilter;
+        private Resident _selectedResident;
+        private Apartment _selectedAddress;
+        private Building _selectedBuilding;
+        private Debt _selectedDebt;
+        private Employee _selectedEmployee;
+        private System.DateTime? _selectedDebtDate;
         private string _loadErrorMessage;
 
         public MainViewModel()
@@ -32,6 +38,14 @@ namespace Demo_01_Akhmatova.ViewModels
         public ObservableCollection<Apartment> Addresses { get; }
 
         public ObservableCollection<Employee> Employees { get; }
+
+        public ObservableCollection<Resident> Residents { get; } = new ObservableCollection<Resident>();
+
+        public ObservableCollection<Building> Buildings { get; } = new ObservableCollection<Building>();
+
+        public ObservableCollection<Debt> Debts { get; } = new ObservableCollection<Debt>();
+
+        public ObservableCollection<Debt> FilteredDebts { get; } = new ObservableCollection<Debt>();
 
         public ObservableCollection<RequestStatus> StatusOptions { get; }
 
@@ -69,6 +83,48 @@ namespace Demo_01_Akhmatova.ViewModels
                 if (SetProperty(ref _selectedAddressFilter, value))
                 {
                     RefreshHistoryByAddress();
+                }
+            }
+        }
+
+        public Resident SelectedResident
+        {
+            get => _selectedResident;
+            set => SetProperty(ref _selectedResident, value);
+        }
+
+        public Apartment SelectedAddress
+        {
+            get => _selectedAddress;
+            set => SetProperty(ref _selectedAddress, value);
+        }
+
+        public Building SelectedBuilding
+        {
+            get => _selectedBuilding;
+            set => SetProperty(ref _selectedBuilding, value);
+        }
+
+        public Debt SelectedDebt
+        {
+            get => _selectedDebt;
+            set => SetProperty(ref _selectedDebt, value);
+        }
+
+        public Employee SelectedEmployee
+        {
+            get => _selectedEmployee;
+            set => SetProperty(ref _selectedEmployee, value);
+        }
+
+        public System.DateTime? SelectedDebtDate
+        {
+            get => _selectedDebtDate;
+            set
+            {
+                if (SetProperty(ref _selectedDebtDate, value))
+                {
+                    RefreshDebts();
                 }
             }
         }
@@ -169,12 +225,25 @@ namespace Demo_01_Akhmatova.ViewModels
                 LoadEmployees();
                 LoadStatuses();
                 LoadRequests();
+                LoadResidents();
+                LoadBuildings();
+                LoadDebts();
                 RefreshFilters();
                 RefreshHistory();
             }
             catch (Exception ex)
             {
-                LoadErrorMessage = $"Не удалось загрузить данные из базы. Проверьте подключение.\n{ex.Message}";
+                var innerMessage = ex.InnerException?.Message;
+                if (!string.IsNullOrWhiteSpace(innerMessage))
+                {
+                    LoadErrorMessage =
+                        $"Не удалось загрузить данные из базы. Проверьте подключение.\n{ex.Message}\n\nПодробности: {innerMessage}";
+                }
+                else
+                {
+                    LoadErrorMessage =
+                        $"Не удалось загрузить данные из базы. Проверьте подключение.\n{ex.Message}";
+                }
             }
         }
 
@@ -206,6 +275,53 @@ namespace Demo_01_Akhmatova.ViewModels
             {
                 Employees.Add(employee);
             }
+        }
+
+        private void LoadResidents()
+        {
+            Residents.Clear();
+            var residents = Context.Resident
+                .AsNoTracking()
+                .OrderBy(resident => resident.FullName)
+                .ToList();
+
+            foreach (var resident in residents)
+            {
+                Residents.Add(resident);
+            }
+        }
+
+        private void LoadBuildings()
+        {
+            Buildings.Clear();
+            var buildings = Context.Building
+                .AsNoTracking()
+                .OrderBy(building => building.Address)
+                .ToList();
+
+            foreach (var building in buildings)
+            {
+                Buildings.Add(building);
+            }
+        }
+
+        private void LoadDebts()
+        {
+            Debts.Clear();
+
+            var debts = Context.Debt
+                .AsNoTracking()
+                .Include(debt => debt.Resident)
+                .Include(debt => debt.Apartment.Building)
+                .OrderByDescending(debt => debt.AsOfDate)
+                .ToList();
+
+            foreach (var debt in debts)
+            {
+                Debts.Add(debt);
+            }
+
+            RefreshDebts();
         }
 
         private void LoadStatuses()
@@ -311,6 +427,24 @@ namespace Demo_01_Akhmatova.ViewModels
             foreach (var entry in historyEntries)
             {
                 FilteredRequestsByAddress.Add(MapHistoryItem(entry));
+            }
+        }
+
+        private void RefreshDebts()
+        {
+            FilteredDebts.Clear();
+
+            var query = Debts.AsEnumerable();
+
+            if (SelectedDebtDate.HasValue)
+            {
+                var date = SelectedDebtDate.Value.Date;
+                query = query.Where(debt => debt.AsOfDate.Date == date);
+            }
+
+            foreach (var debt in query)
+            {
+                FilteredDebts.Add(debt);
             }
         }
 

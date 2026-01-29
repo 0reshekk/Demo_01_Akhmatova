@@ -1,4 +1,4 @@
-﻿<Window
+<Window
     x:Class="Demo_01_Akhmatova.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -92,34 +92,269 @@
                 </Grid>
             </TabItem>
 
+            <TabItem Header="Жильцы">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            Click="AddResidentClick"
+                            Content="Добавить"
+                            Style="{StaticResource ActionButtonStyle}" />
+                        <Button
+                            Click="EditResidentClick"
+                            Content="Редактировать"
+                            Style="{StaticResource ActionButtonStyle}" />
+                        <Button Click="DeleteResidentClick" Content="Удалить" />
+                    </StackPanel>
+
+                    <ListView
+                        Grid.Row="1"
+                        Margin="8"
+                        ItemsSource="{Binding Residents}"
+                        SelectedItem="{Binding SelectedResident}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn
+                                    Width="320"
+                                    DisplayMemberBinding="{Binding FullName}"
+                                    Header="ФИО" />
+                                <GridViewColumn
+                                    Width="180"
+                                    DisplayMemberBinding="{Binding Phone}"
+                                    Header="Телефон" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+
             <TabItem Header="Адреса">
-                <ListView Margin="8" ItemsSource="{Binding Addresses}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn
-                                Width="400"
-                                DisplayMemberBinding="{Binding AddressLine}"
-                                Header="Адрес" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            Click="AddApartmentClick"
+                            Content="Добавить"
+                            Style="{StaticResource ActionButtonStyle}" />
+                        <Button
+                            Click="EditApartmentClick"
+                            Content="Редактировать"
+                            Style="{StaticResource ActionButtonStyle}" />
+                        <Button Click="DeleteApartmentClick" Content="Удалить" />
+                    </StackPanel>
+
+                    <ListView
+                        Grid.Row="1"
+                        Margin="8"
+                        ItemsSource="{Binding Addresses}"
+                        SelectedItem="{Binding SelectedAddress}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn
+                                    Width="260"
+                                    DisplayMemberBinding="{Binding Building.Address}"
+                                    Header="Дом" />
+                                <GridViewColumn
+                                    Width="120"
+                                    DisplayMemberBinding="{Binding ApartmentNumber}"
+                                    Header="Квартира" />
+                                <GridViewColumn
+                                    Width="220"
+                                    DisplayMemberBinding="{Binding AddressLine}"
+                                    Header="Полный адрес" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Жилой фонд">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            Click="AddBuildingClick"
+                            Content="Добавить"
+                            Style="{StaticResource ActionButtonStyle}" />
+                        <Button
+                            Click="EditBuildingClick"
+                            Content="Редактировать"
+                            Style="{StaticResource ActionButtonStyle}" />
+                        <Button Click="DeleteBuildingClick" Content="Удалить" />
+                    </StackPanel>
+
+                    <ListView
+                        Grid.Row="1"
+                        Margin="8"
+                        ItemsSource="{Binding Buildings}"
+                        SelectedItem="{Binding SelectedBuilding}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn
+                                    Width="360"
+                                    DisplayMemberBinding="{Binding Address}"
+                                    Header="Адрес" />
+                                <GridViewColumn
+                                    Width="120"
+                                    DisplayMemberBinding="{Binding ManagementStartDate, StringFormat=d}"
+                                    Header="Начало управления" />
+                                <GridViewColumn
+                                    Width="80"
+                                    DisplayMemberBinding="{Binding Floors}"
+                                    Header="Этажей" />
+                                <GridViewColumn
+                                    Width="100"
+                                    DisplayMemberBinding="{Binding ApartmentsPlanned}"
+                                    Header="Квартир" />
+                                <GridViewColumn
+                                    Width="80"
+                                    DisplayMemberBinding="{Binding BuildYear}"
+                                    Header="Год" />
+                                <GridViewColumn
+                                    Width="100"
+                                    DisplayMemberBinding="{Binding AreaM2}"
+                                    Header="Площадь м²" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Задолженности">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel
+                        Grid.Row="0"
+                        Margin="0,0,0,8"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Margin="0,0,8,0"
+                            Style="{StaticResource SubHeaderStyle}"
+                            Text="Показать задолженности на дату:" />
+                        <DatePicker
+                            Width="150"
+                            SelectedDate="{Binding SelectedDebtDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button
+                            Margin="8,0,0,0"
+                            Content="Сбросить фильтр"
+                            Click="ClearDebtDateFilterClick" />
+                    </StackPanel>
+
+                    <StackPanel
+                        Grid.Row="1"
+                        Margin="0,0,0,8"
+                        Orientation="Horizontal">
+                        <Button
+                            Click="AddDebtClick"
+                            Content="Добавить"
+                            Style="{StaticResource ActionButtonStyle}" />
+                        <Button
+                            Click="EditDebtClick"
+                            Content="Редактировать"
+                            Style="{StaticResource ActionButtonStyle}" />
+                        <Button Click="DeleteDebtClick" Content="Удалить" />
+                    </StackPanel>
+
+                    <ListView
+                        Grid.Row="2"
+                        ItemsSource="{Binding FilteredDebts}"
+                        SelectedItem="{Binding SelectedDebt}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn
+                                    Width="260"
+                                    DisplayMemberBinding="{Binding Apartment.Building.Address}"
+                                    Header="Адрес" />
+                                <GridViewColumn
+                                    Width="80"
+                                    DisplayMemberBinding="{Binding Apartment.ApartmentNumber}"
+                                    Header="Квартира" />
+                                <GridViewColumn
+                                    Width="220"
+                                    DisplayMemberBinding="{Binding Resident.FullName}"
+                                    Header="Владелец" />
+                                <GridViewColumn
+                                    Width="160"
+                                    DisplayMemberBinding="{Binding Resident.Phone}"
+                                    Header="Телефон" />
+                                <GridViewColumn
+                                    Width="110"
+                                    DisplayMemberBinding="{Binding DebtWater, StringFormat=N2}"
+                                    Header="Вода" />
+                                <GridViewColumn
+                                    Width="130"
+                                    DisplayMemberBinding="{Binding DebtElectricity, StringFormat=N2}"
+                                    Header="Электроэнергия" />
+                                <GridViewColumn
+                                    Width="110"
+                                    DisplayMemberBinding="{Binding AsOfDate, StringFormat=d}"
+                                    Header="Дата" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
             </TabItem>
 
             <TabItem Header="Сотрудники">
-                <ListView Margin="8" ItemsSource="{Binding Employees}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn
-                                Width="260"
-                                DisplayMemberBinding="{Binding FullName}"
-                                Header="ФИО" />
-                            <GridViewColumn
-                                Width="160"
-                                DisplayMemberBinding="{Binding Position}"
-                                Header="Должность" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            Click="AddEmployeeClick"
+                            Content="Добавить"
+                            Style="{StaticResource ActionButtonStyle}" />
+                        <Button
+                            Click="EditEmployeeClick"
+                            Content="Редактировать"
+                            Style="{StaticResource ActionButtonStyle}" />
+                        <Button Click="DeleteEmployeeClick" Content="Удалить" />
+                    </StackPanel>
+
+                    <ListView
+                        Grid.Row="1"
+                        Margin="8"
+                        ItemsSource="{Binding Employees}"
+                        SelectedItem="{Binding SelectedEmployee}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn
+                                    Width="260"
+                                    DisplayMemberBinding="{Binding FullName}"
+                                    Header="ФИО" />
+                                <GridViewColumn
+                                    Width="160"
+                                    DisplayMemberBinding="{Binding Position}"
+                                    Header="Должность" />
+                                <GridViewColumn
+                                    Width="140"
+                                    DisplayMemberBinding="{Binding Phone}"
+                                    Header="Телефон" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
             </TabItem>
 
             <TabItem Header="История">
